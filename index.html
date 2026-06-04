@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cell Destiny Machine</title>
+  <style>
+    :root {
+      --bg: #0f1720;
+      --panel: #172532;
+      --panel2: #203442;
+      --teal: #36d6c9;
+      --amber: #f2b84b;
+      --green: #55d98b;
+      --red: #ff6b6b;
+      --text: #f2f7f8;
+      --muted: #b9c7cc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #1d3442 0%, #0f1720 55%),
+        linear-gradient(135deg, #0f1720, #101820);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .game {
+      width: min(1050px, 100%);
+      background: rgba(15, 23, 32, 0.96);
+      border: 2px solid rgba(54, 214, 201, 0.45);
+      border-radius: 22px;
+      box-shadow: 0 0 35px rgba(54, 214, 201, 0.25);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 22px 28px;
+      background: linear-gradient(90deg, #111c25, #1d3442);
+      border-bottom: 2px solid rgba(54, 214, 201, 0.35);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: 2px;
+      color: var(--teal);
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+    }
+
+    .progress-wrap {
+      padding: 16px 28px 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      height: 16px;
+      background: #0a1118;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--teal), var(--green));
+      transition: width 0.35s ease;
+    }
+
+    main {
+      padding: 28px;
+    }
+
+    .screen {
+      display: none;
+      animation: fade 0.25s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .machine {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 760px) {
+      .machine {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .scanner {
+      background: linear-gradient(180deg, #12202a, #0c141c);
+      border: 2px solid rgba(54, 214, 201, 0.35);
+      border-radius: 18px;
+      padding: 22px;
+      min-height: 310px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scanner::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(
+        transparent,
+        rgba(54,214,201,.12),
+        transparent
+      );
+      transform: rotate(18deg);
+      animation: scan 3s linear infinite;
+    }
+
+    @keyframes scan {
+      from { top: -80%; }
+      to { top: 80%; }
+    }
+
+    .cell-icon {
+      position: relative;
+      z-index: 1;
+      font-size: 5rem;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .status {
+      position: relative;
+      z-index: 1;
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(54,214,201,.35);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .status h3 {
+      margin: 0 0 10px;
+      color: var(--amber);
+      font-size: 1.15rem;
+    }
+
+    .status p, .status li {
+      color: var(--text);
+      font-size: 1.08rem;
+      line-height: 1.45;
+    }
+
+    .content-panel {
+      background: var(--panel);
+      border: 2px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--amber);
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+    }
+
+    .question {
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      line-height: 1.35;
+      margin: 20px 0;
+    }
+
+    .choices {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .choice {
+      background: #e8f3f4;
+      color: #12202a;
+      text-align: left;
+      border: 3px solid transparent;
+    }
+
+    .choice:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal);
+    }
+
+    .primary {
+      background: var(--teal);
+      color: #061012;
+      margin-top: 20px;
+    }
+
+    .primary:hover {
+      transform: translateY(-2px);
+      background: #5bf1e6;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      line-height: 1.45;
+    }
+
+    .feedback.correct {
+      display: block;
+      background: rgba(85, 217, 139, 0.16);
+      border: 2px solid var(--green);
+    }
+
+    .feedback.wrong {
+      display: block;
+      background: rgba(255, 107, 107, 0.16);
+      border: 2px solid var(--red);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(242,184,75,.18);
+      border: 2px solid var(--amber);
+      color: var(--amber);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      margin: 10px 0;
+    }
+
+    .final-card {
+      text-align: center;
+      background: linear-gradient(180deg, var(--panel), #101a23);
+      border: 2px solid rgba(54,214,201,.45);
+      border-radius: 20px;
+      padding: 32px;
+    }
+
+    .final-card .big {
+      font-size: clamp(2rem, 5vw, 4rem);
+      margin: 16px 0;
+    }
+
+    .takeaway {
+      background: rgba(54,214,201,.12);
+      border-left: 6px solid var(--teal);
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      line-height: 1.45;
+      margin-top: 24px;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game">
+    <header>
+      <h1>CELL DESTINY MACHINE</h1>
+      <div class="subtitle">Determine what a developing cell will become.</div>
+    </header>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressText">System Offline</span>
+        <span id="scoreText">Mistakes: 0</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </div>
+
+    <main>
+      <section class="screen active" id="welcome">
+        <div class="machine">
+          <div class="scanner">
+            <div class="cell-icon">🧬</div>
+            <div class="status">
+              <h3>Mission Briefing</h3>
+              <p>Every cell begins with the same DNA.</p>
+              <p>Your job is to analyze the internal and external factors and predict the cell’s future specialization.</p>
+            </div>
+          </div>
+
+          <div class="content-panel">
+            <h2>Start System</h2>
+            <p class="question">
+              The Cell Destiny Machine is ready to scan developing stem cells.
+            </p>
+            <p>
+              Answer each question correctly to move to the next processing chamber.
+            </p>
+            <button class="primary" onclick="startGame()">START SYSTEM</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="gameScreen">
+        <div class="machine">
+          <div class="scanner">
+            <div class="cell-icon" id="cellIcon">🧫</div>
+            <div class="status">
+              <h3>Machine Scan Results</h3>
+              <div id="scanInfo"></div>
+            </div>
+          </div>
+
+          <div class="content-panel">
+            <div class="badge" id="chamberLabel"></div>
+            <h2 id="challengeTitle"></h2>
+            <p class="question" id="questionText"></p>
+            <div class="choices" id="choices"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="primary hidden" id="nextBtn" onclick="nextChallenge()">NEXT CHAMBER</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="final">
+        <div class="final-card">
+          <div class="big">🏅</div>
+          <h2>CELL DESTINY ANALYSIS COMPLETE</h2>
+          <p id="rankText" class="question"></p>
+          <p id="finalScore"></p>
+
+          <div class="takeaway">
+            <strong>Final Takeaway:</strong><br />
+            Cells can contain the same DNA but become different cell types because internal and external factors influence differentiation and specialization.
+          </div>
+
+          <button class="primary" onclick="restartGame()">RESTART MACHINE</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const challenges = [
+      {
+        title: "Neural Pathway Scan",
+        icon: "🧠",
+        scan: `
+          <p><strong>Internal Factor:</strong> Nerve-cell genes active</p>
+          <p><strong>External Factor:</strong> Signals from nearby nerve cells</p>
+        `,
+        question: "What specialized cell will most likely develop?",
+        choices: ["Neuron", "Muscle Cell", "Red Blood Cell", "Skin Cell"],
+        correct: "Neuron",
+        feedback: "Correct! The cell’s factors match nervous tissue. This cell is becoming a neuron."
+      },
+      {
+        title: "Muscle Development Scan",
+        icon: "💪",
+        scan: `
+          <p><strong>Internal Factor:</strong> Muscle-related genes active</p>
+          <p><strong>External Factor:</strong> Growth signals for movement tissue</p>
+        `,
+        question: "What specialized cell will most likely develop?",
+        choices: ["Neuron", "Muscle Cell", "Red Blood Cell", "Skin Cell"],
+        correct: "Muscle Cell",
+        feedback: "Correct! This cell is specializing for movement and contraction."
+      },
+      {
+        title: "Oxygen Transport Scan",
+        icon: "🩸",
+        scan: `
+          <p><strong>Internal Factor:</strong> Oxygen transport genes active</p>
+          <p><strong>External Factor:</strong> Signals promoting blood cell development</p>
+        `,
+        question: "What specialized cell will most likely develop?",
+        choices: ["Neuron", "Muscle Cell", "Red Blood Cell", "Skin Cell"],
+        correct: "Red Blood Cell",
+        feedback: "Correct! This cell is specializing to carry oxygen."
+      },
+      {
+        title: "Internal Factor Check",
+        icon: "🧬",
+        scan: `
+          <p>The machine is checking whether you can identify factors that come from inside the cell.</p>
+        `,
+        question: "Which factor is an internal factor?",
+        choices: ["Active genes", "Hormone signal", "Nearby cell signal", "Environmental chemical"],
+        correct: "Active genes",
+        feedback: "Correct! Internal factors originate within the cell, such as DNA and active genes."
+      },
+      {
+        title: "External Factor Check",
+        icon: "🌎",
+        scan: `
+          <p>The machine is checking whether you can identify factors that come from outside the cell.</p>
+        `,
+        question: "Which factor is an external factor?",
+        choices: ["Active genes", "DNA", "Hormone signal", "Chromosomes"],
+        correct: "Hormone signal",
+        feedback: "Correct! External factors come from outside the cell, such as hormones or signals from nearby cells."
+      },
+      {
+        title: "Machine Failure Investigation",
+        icon: "⚠️",
+        scan: `
+          <p><strong>Investigation:</strong> Two identical stem cells entered different laboratory environments.</p>
+          <p><strong>Result:</strong> Cell A became a neuron. Cell B became a muscle cell.</p>
+        `,
+        question: "What best explains these results?",
+        choices: [
+          "Different DNA sequences developed",
+          "External factors influenced differentiation",
+          "Chromosome numbers changed",
+          "DNA replication stopped"
+        ],
+        correct: "External factors influenced differentiation",
+        feedback: "Correct! Environmental signals can influence what cells become."
+      },
+      {
+        title: "Final Destiny Challenge",
+        icon: "🛡️",
+        scan: `
+          <p><strong>Internal Factor:</strong> Skin-cell genes active</p>
+          <p><strong>External Factor:</strong> Signals from nearby skin cells</p>
+        `,
+        question: "Which specialized cell is the most likely output?",
+        choices: ["Skin Cell", "Neuron", "Muscle Cell", "Red Blood Cell"],
+        correct: "Skin Cell",
+        feedback: "Correct! This cell is specializing to form protective skin tissue."
+      }
+    ];
+
+    let current = 0;
+    let mistakes = 0;
+    let answeredCorrectly = false;
+
+    function startGame() {
+      current = 0;
+      mistakes = 0;
+      showScreen("gameScreen");
+      loadChallenge();
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+      document.getElementById(id).classList.add("active");
+    }
+
+    function updateProgress() {
+      const percent = ((current) / challenges.length) * 100;
+      document.getElementById("progressBar").style.width = `${percent}%`;
+      document.getElementById("progressText").textContent =
+        `Chamber ${Math.min(current + 1, challenges.length)} of ${challenges.length}`;
+      document.getElementById("scoreText").textContent = `Mistakes: ${mistakes}`;
+    }
+
+    function loadChallenge() {
+      answeredCorrectly = false;
+      const challenge = challenges[current];
+
+      updateProgress();
+
+      document.getElementById("cellIcon").textContent = challenge.icon;
+      document.getElementById("scanInfo").innerHTML = challenge.scan;
+      document.getElementById("chamberLabel").textContent = `PROCESSING CHAMBER ${current + 1}`;
+      document.getElementById("challengeTitle").textContent = challenge.title;
+      document.getElementById("questionText").textContent = challenge.question;
+
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+
+      challenge.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.textContent = choice;
+        btn.onclick = () => checkAnswer(choice);
+        choicesDiv.appendChild(btn);
+      });
+
+      const feedback = document.getElementById("feedback");
+      feedback.className = "feedback";
+      feedback.textContent = "";
+
+      document.getElementById("nextBtn").classList.add("hidden");
+    }
+
+    function checkAnswer(choice) {
+      if (answeredCorrectly) return;
+
+      const challenge = challenges[current];
+      const feedback = document.getElementById("feedback");
+
+      if (choice === challenge.correct) {
+        answeredCorrectly = true;
+        feedback.className = "feedback correct";
+        feedback.textContent = challenge.feedback;
+        document.getElementById("nextBtn").classList.remove("hidden");
+      } else {
+        mistakes++;
+        updateProgress();
+        feedback.className = "feedback wrong";
+        feedback.textContent = "Try again — check the internal and external factors.";
+      }
+    }
+
+    function nextChallenge() {
+      current++;
+
+      if (current >= challenges.length) {
+        showFinal();
+      } else {
+        loadChallenge();
+      }
+    }
+
+    function showFinal() {
+      document.getElementById("progressBar").style.width = "100%";
+      document.getElementById("progressText").textContent = "Analysis Complete";
+      document.getElementById("scoreText").textContent = `Mistakes: ${mistakes}`;
+
+      let rank;
+      if (mistakes <= 2) {
+        rank = "Master Cell Destiny Technician";
+      } else if (mistakes <= 4) {
+        rank = "Certified Cell Destiny Technician";
+      } else {
+        rank = "Technician in Training";
+      }
+
+      document.getElementById("rankText").textContent = rank;
+      document.getElementById("finalScore").textContent =
+        `Final Mistakes: ${mistakes}`;
+
+      showScreen("final");
+    }
+
+    function restartGame() {
+      startGame();
+    }
+  </script>
+</body>
+</html>
