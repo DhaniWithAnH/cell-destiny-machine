@@ -2,583 +2,348 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cell Fate Road Trip</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Differentiation Diagnostic</title>
 <style>
 :root{
-  --navy:#0f2233;
-  --road:#2d3742;
-  --sky:#cfefff;
-  --grass:#7dcf8a;
-  --yellow:#ffd166;
-  --orange:#f77f00;
-  --blue:#118ab2;
-  --green:#06d6a0;
-  --red:#ef476f;
-  --text:#10212b;
-  --white:#ffffff;
+  --bg:#071018; --panel:#102532; --panel2:#173746; --teal:#35e0d0;
+  --amber:#f6b84b; --green:#58d98b; --red:#ff6b6b; --text:#f4fbfc;
+  --muted:#b9c9cf;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(#bfefff 0%, #eaf9ff 45%, #8bdc91 45%, #72c97e 100%);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  color:var(--text);
+  margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif;
+  background:radial-gradient(circle at top,#1d3d4a 0%,#071018 55%);
+  color:var(--text); display:flex; justify-content:center; align-items:center; padding:18px;
 }
-.game{
-  width:min(1050px,100%);
-  background:rgba(255,255,255,.96);
-  border-radius:28px;
-  box-shadow:0 15px 45px rgba(0,0,0,.25);
-  overflow:hidden;
-  border:5px solid var(--navy);
+.app{
+  width:min(1100px,100%); background:rgba(7,16,24,.96);
+  border:2px solid rgba(53,224,208,.45); border-radius:24px; overflow:hidden;
+  box-shadow:0 0 40px rgba(53,224,208,.22);
 }
 header{
-  background:linear-gradient(90deg,var(--navy),#174968);
-  color:white;
-  padding:22px 28px;
+  padding:22px 28px; background:linear-gradient(90deg,#0c1b24,#173746);
+  border-bottom:2px solid rgba(53,224,208,.3);
 }
-h1{
-  margin:0;
-  font-size:clamp(2rem,5vw,4rem);
-  letter-spacing:1px;
-}
-.subtitle{
-  font-size:1.2rem;
-  opacity:.9;
-  margin-top:6px;
-}
-.progress-area{
-  padding:14px 28px 0;
-}
-.progress-label{
-  display:flex;
-  justify-content:space-between;
-  font-weight:bold;
-  color:#315064;
-}
-.progress-bar{
-  height:16px;
-  background:#d9e6ec;
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:8px;
-}
-.progress{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--green),var(--blue));
-  transition:.35s;
-}
-main{
-  padding:28px;
-}
+h1{margin:0;color:var(--teal);font-size:clamp(2rem,4vw,3.7rem);letter-spacing:1px}
+.subtitle{color:var(--muted);font-size:1.15rem;margin-top:6px}
+.progress-wrap{padding:14px 28px 0}
+.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-weight:bold}
+.progress-bar{height:16px;background:#061014;border-radius:999px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--green));transition:.35s}
+main{padding:28px}
 .screen{display:none}
 .screen.active{display:block;animation:fade .25s ease}
-@keyframes fade{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.road-scene{
-  display:grid;
-  grid-template-columns:1fr 1.1fr;
-  gap:24px;
-}
-@media(max-width:780px){
-  .road-scene{grid-template-columns:1fr}
-}
-.map{
-  background:linear-gradient(#a9e4ff 0%,#dff7ff 42%,#7acb80 42%,#62b96c 100%);
-  border:4px solid #24475a;
-  border-radius:22px;
-  min-height:390px;
-  position:relative;
-  overflow:hidden;
-}
-.road{
-  position:absolute;
-  left:45%;
-  top:38%;
-  width:130px;
-  height:75%;
-  background:var(--road);
-  transform:rotate(-8deg);
-  border-left:8px solid #1f2730;
-  border-right:8px solid #1f2730;
-}
-.road:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:0;
-  width:8px;
-  height:100%;
-  transform:translateX(-50%);
-  background:repeating-linear-gradient(
-    to bottom,
-    var(--yellow) 0 24px,
-    transparent 24px 45px
-  );
-}
-.car{
-  position:absolute;
-  bottom:55px;
-  left:42%;
-  font-size:4rem;
-  z-index:2;
-  filter:drop-shadow(0 4px 3px rgba(0,0,0,.3));
-}
-.sign{
-  position:absolute;
-  top:24px;
-  left:24px;
-  right:24px;
-  background:#fff8d6;
-  border:4px solid #5a3c16;
-  border-radius:14px;
-  padding:14px;
-  text-align:center;
-  font-weight:900;
-  font-size:1.3rem;
-  z-index:3;
-}
-.destination{
-  position:absolute;
-  right:18px;
-  bottom:24px;
-  background:white;
-  border:4px solid var(--blue);
-  border-radius:18px;
-  padding:12px;
-  font-size:3.2rem;
-  z-index:2;
-}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .card{
-  background:#f7fbff;
-  border:4px solid #24475a;
-  border-radius:22px;
-  padding:24px;
-  min-height:390px;
+  background:var(--panel); border:2px solid rgba(255,255,255,.08);
+  border-radius:22px; padding:28px;
 }
 .badge{
-  display:inline-block;
-  background:var(--yellow);
-  border:3px solid #9c6400;
-  border-radius:999px;
-  padding:8px 14px;
-  font-weight:900;
-  margin-bottom:12px;
+  display:inline-block; border:2px solid var(--amber); color:var(--amber);
+  padding:8px 14px; border-radius:999px; font-weight:800; margin-bottom:14px;
 }
-h2{
-  margin:0 0 12px;
-  font-size:clamp(1.7rem,3vw,2.5rem);
-  color:#174968;
+h2{margin:0 0 12px;color:var(--amber);font-size:clamp(1.7rem,3vw,2.5rem)}
+p,.scenario,.explain{font-size:1.15rem;line-height:1.5}
+.scenario{
+  background:rgba(53,224,208,.1); border-left:6px solid var(--teal);
+  padding:16px; border-radius:12px; margin:18px 0;
 }
-.story{
-  font-size:1.16rem;
-  line-height:1.5;
-  background:#eaf7ff;
-  border-left:6px solid var(--blue);
-  padding:14px;
-  border-radius:12px;
-}
-.factor-box{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin:16px 0;
-}
-@media(max-width:600px){
-  .factor-box{grid-template-columns:1fr}
-}
-.factor{
-  background:white;
-  border:3px solid #c6dce8;
-  border-radius:14px;
-  padding:14px;
-  font-size:1.05rem;
-  line-height:1.35;
-}
-.factor strong{color:#174968}
-.question{
-  font-size:clamp(1.25rem,2.4vw,1.6rem);
-  font-weight:800;
-  line-height:1.35;
-  margin:18px 0;
-}
-.choices{
-  display:grid;
-  gap:12px;
-}
+.question{font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:800;line-height:1.35;margin:20px 0}
+.choices{display:grid;gap:13px}
 button{
-  font-family:inherit;
-  border:none;
-  cursor:pointer;
-  border-radius:15px;
-  padding:16px 18px;
-  font-size:1.12rem;
-  font-weight:900;
-  transition:.15s;
+  font-family:inherit; border:none; cursor:pointer; border-radius:15px;
+  padding:16px 18px; font-size:1.12rem; font-weight:800; transition:.15s;
 }
 button:hover{transform:translateY(-2px)}
-.choice{
-  background:#ffffff;
-  color:#10212b;
-  border:3px solid #c6dce8;
-  text-align:left;
-}
-.choice:hover{border-color:var(--orange)}
-.primary{
-  background:var(--orange);
-  color:white;
-  margin-top:18px;
-}
-.primary:hover{background:#ff9d2e}
+.choice{background:#edf8f9;color:#08131a;text-align:left;border:3px solid transparent}
+.choice:hover{border-color:var(--teal)}
+.primary{background:var(--teal);color:#061014;margin-top:18px}
 .feedback{
-  display:none;
-  padding:15px;
-  margin-top:16px;
-  border-radius:14px;
-  font-size:1.12rem;
-  line-height:1.4;
-  font-weight:bold;
+  display:none; margin-top:16px; padding:16px; border-radius:14px;
+  font-size:1.1rem; line-height:1.45; font-weight:bold;
 }
-.correct{
-  display:block;
-  background:#d9ffe9;
-  border:3px solid var(--green);
-}
-.wrong{
-  display:block;
-  background:#ffe2e8;
-  border:3px solid var(--red);
-}
+.correct{display:block;background:rgba(88,217,139,.16);border:2px solid var(--green)}
+.wrong{display:block;background:rgba(255,107,107,.16);border:2px solid var(--red)}
 .hidden{display:none}
-.final{
-  text-align:center;
-  background:#f7fbff;
-  border:4px solid #24475a;
-  border-radius:24px;
-  padding:32px;
+.table{
+  width:100%; border-collapse:collapse; margin:16px 0; background:#0b1b25;
+  overflow:hidden; border-radius:12px; font-size:1.05rem;
 }
-.final .big{font-size:5rem}
+.table th,.table td{border:1px solid rgba(255,255,255,.18);padding:12px;text-align:left}
+.table th{color:var(--teal)}
+.final{text-align:center}
+.big{font-size:5rem}
 .takeaway{
-  text-align:left;
-  margin:22px auto;
-  max-width:760px;
-  background:#eaf7ff;
-  border-left:8px solid var(--blue);
-  border-radius:14px;
-  padding:18px;
-  font-size:1.15rem;
-  line-height:1.5;
+  text-align:left; max-width:760px; margin:22px auto 0;
+  background:rgba(53,224,208,.12); border-left:6px solid var(--teal);
+  border-radius:14px; padding:18px; font-size:1.15rem; line-height:1.5;
 }
 </style>
 </head>
 <body>
-<div class="game">
+<div class="app">
 <header>
-  <h1>CELL FATE ROAD TRIP</h1>
-  <div class="subtitle">Guide a stem cell to its specialized destination.</div>
+  <h1>DIFFERENTIATION DIAGNOSTIC</h1>
+  <div class="subtitle">Science Night Shift • EOC Review Challenge</div>
 </header>
 
-<div class="progress-area">
+<div class="progress-wrap">
   <div class="progress-label">
-    <span id="progressText">Road Trip Not Started</span>
-    <span id="scoreText">Wrong Turns: 0</span>
+    <span id="progressText">System Ready</span>
+    <span id="scoreText">Mistakes: 0</span>
   </div>
   <div class="progress-bar"><div class="progress" id="progress"></div></div>
 </div>
 
 <main>
 <section class="screen active" id="welcome">
-  <div class="road-scene">
-    <div class="map">
-      <div class="sign">START: STEM CELL</div>
-      <div class="road"></div>
-      <div class="car">🚗</div>
-      <div class="destination">🧬</div>
-    </div>
-    <div class="card">
-      <span class="badge">MISSION START</span>
-      <h2>Where Will This Cell Go?</h2>
-      <p class="story">
-        A stem cell is starting a road trip. Along the way, it will receive signals and activate certain genes.
-        These factors help determine what specialized cell it will become.
-      </p>
-      <p class="question">
-        Your job: read the road signs, study the clues, and choose the correct cell destination.
-      </p>
-      <button class="primary" onclick="startGame()">START ROAD TRIP</button>
-    </div>
+  <div class="card">
+    <span class="badge">EOC REVIEW MODE</span>
+    <h2>Cell Specialization Challenge</h2>
+    <p>This review checks the three big ideas from today’s lesson:</p>
+    <p>✅ Specialized cells have specific jobs.<br>
+       ✅ Cells can have the same DNA but use different genes.<br>
+       ✅ Internal and external factors influence differentiation.</p>
+    <p class="question">Answer each EOC-style question to complete the diagnostic.</p>
+    <button class="primary" onclick="start()">START DIAGNOSTIC</button>
   </div>
 </section>
 
-<section class="screen" id="gameScreen">
-  <div class="road-scene">
-    <div class="map">
-      <div class="sign" id="roadSign">ROAD SIGN</div>
-      <div class="road"></div>
-      <div class="car" id="carIcon">🚗</div>
-      <div class="destination" id="destinationIcon">❓</div>
-    </div>
-
-    <div class="card">
-      <span class="badge" id="stopLabel"></span>
-      <h2 id="title"></h2>
-      <p class="story" id="scenario"></p>
-
-      <div class="factor-box" id="factors"></div>
-
-      <p class="question" id="question"></p>
-      <div class="choices" id="choices"></div>
-
-      <div class="feedback" id="feedback"></div>
-      <button class="primary hidden" id="nextBtn" onclick="nextStop()">NEXT STOP</button>
-    </div>
+<section class="screen" id="quiz">
+  <div class="card">
+    <span class="badge" id="qNumber"></span>
+    <h2 id="title"></h2>
+    <div id="scenario" class="scenario"></div>
+    <div id="tableWrap"></div>
+    <p class="question" id="question"></p>
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="primary hidden" id="nextBtn" onclick="next()">NEXT QUESTION</button>
   </div>
 </section>
 
-<section class="screen" id="finalScreen">
-  <div class="final">
-    <div class="big">🏁</div>
-    <h2>ROAD TRIP COMPLETE!</h2>
-    <p class="question" id="rankText"></p>
+<section class="screen" id="final">
+  <div class="card final">
+    <div class="big">✅</div>
+    <h2>DIAGNOSTIC COMPLETE</h2>
+    <p class="question" id="rank"></p>
     <p id="finalScore"></p>
-
     <div class="takeaway">
       <strong>Final Takeaway:</strong><br>
-      Cells can have the same DNA but become different cell types. Internal factors, like active genes, and external factors, like signals from the environment, help guide cell differentiation and specialization.
+      Cells can have the same DNA but become different cell types because different genes are active. Internal factors, like genes, and external factors, like signals from the environment, influence differentiation and specialization.
     </div>
-
-    <button class="primary" onclick="restartGame()">PLAY AGAIN</button>
+    <button class="primary" onclick="restart()">RESTART</button>
   </div>
 </section>
 </main>
 </div>
 
 <script>
-const stops = [
-  {
-    sign:"NEURAL HIGHWAY",
-    title:"Stop 1: Neural Highway",
-    icon:"🧠",
-    scenario:"The stem cell reaches a road lined with signal towers. Messages are moving quickly along the route.",
-    internal:"Nerve-cell genes are active.",
-    external:"Signals are coming from nearby nerve cells.",
-    question:"Which specialized cell is this road trip leading to?",
-    choices:["Neuron","Muscle Cell","Red Blood Cell","Skin Cell"],
-    answer:"Neuron",
-    correct:"Correct! A neuron is specialized to send messages through the body."
-  },
-  {
-    sign:"MUSCLE MOUNTAIN ROAD",
-    title:"Stop 2: Muscle Mountain Road",
-    icon:"💪",
-    scenario:"The road becomes steep, and the cell enters an area focused on movement and force.",
-    internal:"Muscle-related genes are active.",
-    external:"Growth signals support movement tissue.",
-    question:"Which specialized cell is most likely to form?",
-    choices:["Neuron","Muscle Cell","Red Blood Cell","Skin Cell"],
-    answer:"Muscle Cell",
-    correct:"Correct! Muscle cells are specialized to contract and help the body move."
-  },
-  {
-    sign:"OXYGEN EXPRESSWAY",
-    title:"Stop 3: Oxygen Expressway",
-    icon:"🩸",
-    scenario:"The cell enters a busy transport route where oxygen needs to be carried throughout the body.",
-    internal:"Oxygen transport genes are active.",
-    external:"Signals promote blood cell development.",
-    question:"Which specialized cell matches this destination?",
-    choices:["Skin Cell","Red Blood Cell","Neuron","Muscle Cell"],
-    answer:"Red Blood Cell",
-    correct:"Correct! Red blood cells are specialized to carry oxygen."
-  },
-  {
-    sign:"PROTECTION PARKWAY",
-    title:"Stop 4: Protection Parkway",
-    icon:"🛡️",
-    scenario:"The road leads to the outer boundary of the body, where cells form a protective barrier.",
-    internal:"Skin-cell genes are active.",
-    external:"Signals come from nearby skin cells.",
-    question:"What cell destination makes the most sense?",
-    choices:["Neuron","Skin Cell","Muscle Cell","Red Blood Cell"],
-    answer:"Skin Cell",
-    correct:"Correct! Skin cells help protect the body."
-  },
-  {
-    sign:"INTERNAL FACTOR CHECKPOINT",
-    title:"Stop 5: Internal Factor Checkpoint",
-    icon:"🧬",
-    scenario:"A checkpoint sign asks you to identify which clue comes from inside the cell.",
-    internal:"Internal factors are instructions or processes inside the cell.",
-    external:"External factors come from outside the cell.",
-    question:"Which is an internal factor?",
-    choices:["Active genes","Hormone signal","Signal from nearby cells","Temperature outside the cell"],
-    answer:"Active genes",
-    correct:"Correct! Active genes are internal factors because they are inside the cell."
-  },
-  {
-    sign:"EXTERNAL SIGNAL BRIDGE",
-    title:"Stop 6: External Signal Bridge",
-    icon:"🌎",
-    scenario:"The stem cell crosses a bridge where outside messages influence its path.",
-    internal:"DNA is inside the cell.",
-    external:"Signals from hormones or nearby cells come from outside the cell.",
-    question:"Which is an external factor?",
-    choices:["DNA","Chromosomes","Active genes","Hormone signal"],
-    answer:"Hormone signal",
-    correct:"Correct! A hormone signal is an external factor because it comes from outside the cell."
-  },
-  {
-    sign:"TWIN STEM CELL DETOUR",
-    title:"Stop 7: Twin Stem Cell Detour",
-    icon:"🔀",
-    scenario:"Two identical stem cells start with the same DNA. One travels through nerve signals and becomes a neuron. The other travels through muscle signals and becomes a muscle cell.",
-    internal:"Both cells started with the same DNA.",
-    external:"Each cell experienced a different environment.",
-    question:"What does this best show?",
-    choices:[
-      "External factors can influence differentiation",
-      "Specialized cells contain different DNA",
-      "Cells lose chromosomes as they specialize",
-      "DNA is not used during differentiation"
-    ],
-    answer:"External factors can influence differentiation",
-    correct:"Correct! Different environments can send different signals that influence what cells become."
-  },
-  {
-    sign:"FINAL DESTINATION",
-    title:"Final Stop: Cell Fate Review",
-    icon:"🏁",
-    scenario:"The road trip is almost over. You need to explain the biggest idea from the journey.",
-    internal:"Different genes can be active in different cells.",
-    external:"Outside signals can influence how cells develop.",
-    question:"Why can cells with the same DNA become different cell types?",
-    choices:[
-      "They use different genes and respond to different signals",
-      "They contain completely different DNA",
-      "They stop using DNA after specialization",
-      "They all become the same type of cell"
-    ],
-    answer:"They use different genes and respond to different signals",
-    correct:"Correct! Same DNA can lead to different cell types when different genes are active and signals guide development."
-  }
+const questions = [
+{
+title:"Question 1: Structure and Function",
+scenario:"A student observes that a nerve cell has long branching extensions.",
+question:"How does this structure help the nerve cell perform its job?",
+choices:[
+"It helps the cell send messages over long distances.",
+"It helps the cell carry oxygen.",
+"It helps the cell form a protective barrier.",
+"It helps the cell store extra water."
+],
+answer:"It helps the cell send messages over long distances.",
+explain:"Correct! A nerve cell’s long shape helps it send signals through the body."
+},
+{
+title:"Question 2: Specialized Cell Data",
+scenario:"A scientist studies several specialized cells from the same organism.",
+table:`
+<table class="table">
+<tr><th>Cell Type</th><th>Main Function</th></tr>
+<tr><td>Cell A</td><td>Carries oxygen</td></tr>
+<tr><td>Cell B</td><td>Sends signals</td></tr>
+<tr><td>Cell C</td><td>Contracts for movement</td></tr>
+<tr><td>Cell D</td><td>Forms a protective covering</td></tr>
+</table>
+`,
+question:"Which statement best explains why these cells have different functions?",
+choices:[
+"Each cell contains different DNA.",
+"Each cell contains a different number of chromosomes.",
+"Different genes are active in different cells.",
+"Specialized cells do not use DNA."
+],
+answer:"Different genes are active in different cells.",
+explain:"Correct! Most cells have the same DNA, but different genes can be active."
+},
+{
+title:"Question 3: Internal Factors",
+scenario:"A developing cell becomes a muscle cell because muscle-related genes are active inside the cell.",
+question:"Which factor most directly influenced this specialization?",
+choices:[
+"Active genes inside the cell",
+"Signals from nearby cells",
+"Temperature outside the cell",
+"Nutrients in the environment"
+],
+answer:"Active genes inside the cell",
+explain:"Correct! Active genes are internal factors because they come from inside the cell."
+},
+{
+title:"Question 4: External Factors",
+scenario:"Scientists grow identical stem cells in two containers. Cells in Container A receive nerve-growth signals and become nerve cells. Cells in Container B receive muscle-growth signals and become muscle cells.",
+question:"What does this investigation demonstrate?",
+choices:[
+"Stem cells contain different DNA.",
+"External factors can influence differentiation.",
+"Cells lose chromosomes as they specialize.",
+"DNA replication stops during differentiation."
+],
+answer:"External factors can influence differentiation.",
+explain:"Correct! Signals from the environment are external factors that can influence what cells become."
+},
+{
+title:"Question 5: Same DNA, Different Cells",
+scenario:"A muscle cell and a skin cell are taken from the same person. Both cells contain the same DNA.",
+question:"Why do these cells look and function differently?",
+choices:[
+"They use different genes.",
+"They contain different chromosomes.",
+"They were made by different organisms.",
+"They no longer contain DNA."
+],
+answer:"They use different genes.",
+explain:"Correct! Different genes are active in different specialized cells."
+},
+{
+title:"Question 6: Cell Specialization",
+scenario:"Red blood cells are thin, disc-shaped cells that move through blood vessels.",
+question:"Which function matches this specialized structure?",
+choices:[
+"Carrying oxygen through the body",
+"Sending electrical messages",
+"Contracting to move bones",
+"Protecting the outside of the body"
+],
+answer:"Carrying oxygen through the body",
+explain:"Correct! Red blood cells are specialized to carry oxygen."
+},
+{
+title:"Question 7: Internal or External?",
+scenario:"A developing cell receives hormone signals from another part of the body.",
+question:"How should this factor be classified?",
+choices:[
+"Internal factor",
+"External factor",
+"Chromosome change",
+"DNA replication error"
+],
+answer:"External factor",
+explain:"Correct! Hormone signals come from outside the cell, so they are external factors."
+},
+{
+title:"Question 8: Big Picture",
+scenario:"During development, unspecialized cells become nerve cells, muscle cells, skin cells, and blood cells.",
+question:"Which statement best summarizes cell differentiation?",
+choices:[
+"Cells become specialized for different jobs.",
+"Cells all become the same type of cell.",
+"Cells lose all DNA as they develop.",
+"Cells stop using genes after they divide."
+],
+answer:"Cells become specialized for different jobs.",
+explain:"Correct! Differentiation is the process of cells becoming specialized."
+}
 ];
 
-let current = 0;
-let wrongTurns = 0;
-let locked = false;
+let current=0;
+let mistakes=0;
+let locked=false;
 
 function show(id){
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
-function startGame(){
-  current = 0;
-  wrongTurns = 0;
-  show("gameScreen");
-  loadStop();
+function start(){
+current=0;
+mistakes=0;
+show("quiz");
+loadQuestion();
 }
 
 function updateProgress(){
-  const percent = (current / stops.length) * 100;
-  document.getElementById("progress").style.width = percent + "%";
-  document.getElementById("progressText").textContent = `Stop ${Math.min(current + 1, stops.length)} of ${stops.length}`;
-  document.getElementById("scoreText").textContent = `Wrong Turns: ${wrongTurns}`;
+document.getElementById("progress").style.width=(current/questions.length*100)+"%";
+document.getElementById("progressText").textContent=`Question ${Math.min(current+1,questions.length)} of ${questions.length}`;
+document.getElementById("scoreText").textContent=`Mistakes: ${mistakes}`;
 }
 
-function loadStop(){
-  locked = false;
-  const stop = stops[current];
-  updateProgress();
+function loadQuestion(){
+locked=false;
+const q=questions[current];
+updateProgress();
 
-  document.getElementById("roadSign").textContent = stop.sign;
-  document.getElementById("destinationIcon").textContent = stop.icon;
-  document.getElementById("stopLabel").textContent = `ROAD STOP ${current + 1}`;
-  document.getElementById("title").textContent = stop.title;
-  document.getElementById("scenario").textContent = stop.scenario;
-  document.getElementById("question").textContent = stop.question;
+document.getElementById("qNumber").textContent=`DIAGNOSTIC ITEM ${current+1}`;
+document.getElementById("title").textContent=q.title;
+document.getElementById("scenario").textContent=q.scenario;
+document.getElementById("tableWrap").innerHTML=q.table || "";
+document.getElementById("question").textContent=q.question;
 
-  document.getElementById("factors").innerHTML = `
-    <div class="factor"><strong>Internal Clue:</strong><br>${stop.internal}</div>
-    <div class="factor"><strong>External Clue:</strong><br>${stop.external}</div>
-  `;
+const choices=document.getElementById("choices");
+choices.innerHTML="";
+q.choices.forEach(choice=>{
+const btn=document.createElement("button");
+btn.className="choice";
+btn.textContent=choice;
+btn.onclick=()=>check(choice);
+choices.appendChild(btn);
+});
 
-  const choices = document.getElementById("choices");
-  choices.innerHTML = "";
-
-  stop.choices.forEach(choice => {
-    const btn = document.createElement("button");
-    btn.className = "choice";
-    btn.textContent = choice;
-    btn.onclick = () => checkAnswer(choice);
-    choices.appendChild(btn);
-  });
-
-  const feedback = document.getElementById("feedback");
-  feedback.className = "feedback";
-  feedback.textContent = "";
-
-  document.getElementById("nextBtn").classList.add("hidden");
+const feedback=document.getElementById("feedback");
+feedback.className="feedback";
+feedback.textContent="";
+document.getElementById("nextBtn").classList.add("hidden");
 }
 
-function checkAnswer(choice){
-  if(locked) return;
-  const stop = stops[current];
-  const feedback = document.getElementById("feedback");
+function check(choice){
+if(locked)return;
+const q=questions[current];
+const feedback=document.getElementById("feedback");
 
-  if(choice === stop.answer){
-    locked = true;
-    feedback.className = "feedback correct";
-    feedback.textContent = stop.correct;
-    document.getElementById("nextBtn").classList.remove("hidden");
-  } else {
-    wrongTurns++;
-    updateProgress();
-    feedback.className = "feedback wrong";
-    feedback.textContent = "Wrong turn! Look back at the internal and external clues, then try again.";
-  }
+if(choice===q.answer){
+locked=true;
+feedback.className="feedback correct";
+feedback.textContent=q.explain;
+document.getElementById("nextBtn").classList.remove("hidden");
+}else{
+mistakes++;
+updateProgress();
+feedback.className="feedback wrong";
+feedback.textContent="Try again. Read the scenario carefully and look for the clue.";
+}
 }
 
-function nextStop(){
-  current++;
-  if(current >= stops.length){
-    finishGame();
-  } else {
-    loadStop();
-  }
+function next(){
+current++;
+if(current>=questions.length){finish();}
+else{loadQuestion();}
 }
 
-function finishGame(){
-  document.getElementById("progress").style.width = "100%";
-  document.getElementById("progressText").textContent = "Road Trip Complete";
-  document.getElementById("scoreText").textContent = `Wrong Turns: ${wrongTurns}`;
+function finish(){
+document.getElementById("progress").style.width="100%";
+document.getElementById("progressText").textContent="Diagnostic Complete";
+document.getElementById("scoreText").textContent=`Mistakes: ${mistakes}`;
 
-  let rank = "";
-  if(wrongTurns <= 2){
-    rank = "Expert Cell Fate Navigator";
-  } else if(wrongTurns <= 5){
-    rank = "Certified Cell Fate Navigator";
-  } else {
-    rank = "Navigator in Training";
-  }
+let rank = mistakes<=2 ? "EOC Ready: Strong Understanding" :
+           mistakes<=5 ? "Almost There: Keep Practicing" :
+           "Review Needed: Try Again";
 
-  document.getElementById("rankText").textContent = rank;
-  document.getElementById("finalScore").textContent = `Wrong Turns: ${wrongTurns}`;
-  show("finalScreen");
+document.getElementById("rank").textContent=rank;
+document.getElementById("finalScore").textContent=`Final Mistakes: ${mistakes}`;
+show("final");
 }
 
-function restartGame(){
-  startGame();
-}
+function restart(){start();}
 </script>
 </body>
 </html>
