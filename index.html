@@ -2,348 +2,655 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Differentiation Diagnostic</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cell Identity Theft</title>
 <style>
 :root{
-  --bg:#071018; --panel:#102532; --panel2:#173746; --teal:#35e0d0;
-  --amber:#f6b84b; --green:#58d98b; --red:#ff6b6b; --text:#f4fbfc;
-  --muted:#b9c9cf;
+  --bg:#071018;
+  --panel:#101f2a;
+  --panel2:#152b39;
+  --teal:#37e0d0;
+  --amber:#f4b84a;
+  --green:#58d98b;
+  --red:#ff6b6b;
+  --text:#f5fbfc;
+  --muted:#b7c8cf;
+  --paper:#eef4f2;
+  --ink:#10212b;
 }
 *{box-sizing:border-box}
 body{
-  margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif;
-  background:radial-gradient(circle at top,#1d3d4a 0%,#071018 55%);
-  color:var(--text); display:flex; justify-content:center; align-items:center; padding:18px;
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left,#1c3c49 0%,transparent 36%),
+    linear-gradient(135deg,#050b10,#0b1d27 60%,#071018);
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:18px;
 }
 .app{
-  width:min(1100px,100%); background:rgba(7,16,24,.96);
-  border:2px solid rgba(53,224,208,.45); border-radius:24px; overflow:hidden;
-  box-shadow:0 0 40px rgba(53,224,208,.22);
+  width:min(1180px,100%);
+  min-height:720px;
+  background:rgba(7,16,24,.96);
+  border:2px solid rgba(55,224,208,.38);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 0 42px rgba(55,224,208,.20);
 }
 header{
-  padding:22px 28px; background:linear-gradient(90deg,#0c1b24,#173746);
-  border-bottom:2px solid rgba(53,224,208,.3);
+  padding:22px 28px;
+  background:linear-gradient(90deg,#0c1b24,#173746);
+  border-bottom:2px solid rgba(55,224,208,.28);
 }
-h1{margin:0;color:var(--teal);font-size:clamp(2rem,4vw,3.7rem);letter-spacing:1px}
-.subtitle{color:var(--muted);font-size:1.15rem;margin-top:6px}
-.progress-wrap{padding:14px 28px 0}
-.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-weight:bold}
-.progress-bar{height:16px;background:#061014;border-radius:999px;overflow:hidden;margin-top:8px}
-.progress{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--green));transition:.35s}
+h1{
+  margin:0;
+  font-size:clamp(2rem,4vw,3.8rem);
+  color:var(--teal);
+  letter-spacing:1.5px;
+}
+.subtitle{
+  color:var(--muted);
+  margin-top:6px;
+  font-size:1.15rem;
+}
+.progress-wrap{
+  padding:14px 28px 0;
+}
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-weight:bold;
+  gap:12px;
+}
+.progress-bar{
+  height:16px;
+  background:#050d12;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:8px;
+  border:1px solid rgba(255,255,255,.12);
+}
+.progress{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--teal),var(--green));
+  transition:.35s ease;
+}
 main{padding:28px}
 .screen{display:none}
 .screen.active{display:block;animation:fade .25s ease}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.card{
-  background:var(--panel); border:2px solid rgba(255,255,255,.08);
-  border-radius:22px; padding:28px;
+@keyframes fade{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.case-layout{
+  display:grid;
+  grid-template-columns:1fr 1.12fr;
+  gap:24px;
+}
+@media(max-width:850px){
+  .case-layout{grid-template-columns:1fr}
+}
+.board{
+  background:
+    linear-gradient(rgba(255,255,255,.04),rgba(255,255,255,.02)),
+    #0d1a22;
+  border:2px solid rgba(55,224,208,.3);
+  border-radius:22px;
+  padding:20px;
+  min-height:500px;
+  position:relative;
+}
+.board-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  padding-bottom:12px;
+  margin-bottom:16px;
+}
+.stamp{
+  color:var(--amber);
+  border:2px solid var(--amber);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:.9rem;
+  font-weight:900;
+}
+.evidence{
+  display:grid;
+  gap:12px;
+}
+.file{
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:14px;
+  padding:15px;
+  box-shadow:0 6px 12px rgba(0,0,0,.25);
+  border-left:8px solid var(--teal);
+}
+.file h3{
+  margin:0 0 8px;
+  font-size:1.05rem;
+  color:#0e5660;
+}
+.file p{
+  margin:0;
+  line-height:1.42;
+  font-size:1.02rem;
+}
+.sample-card{
+  margin-top:16px;
+  background:linear-gradient(180deg,#142b39,#081119);
+  border:1px solid rgba(55,224,208,.35);
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+}
+.sample-icon{
+  font-size:5rem;
+  margin:8px 0;
+  filter:drop-shadow(0 0 14px rgba(55,224,208,.35));
+}
+.scan-line{
+  height:10px;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  animation:scan 1.8s linear infinite;
+  opacity:.75;
+}
+@keyframes scan{
+  from{transform:translateX(-45%)}
+  to{transform:translateX(45%)}
+}
+.panel{
+  background:var(--panel);
+  border:2px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:24px;
+  min-height:500px;
 }
 .badge{
-  display:inline-block; border:2px solid var(--amber); color:var(--amber);
-  padding:8px 14px; border-radius:999px; font-weight:800; margin-bottom:14px;
+  display:inline-block;
+  color:var(--amber);
+  border:2px solid var(--amber);
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:900;
+  margin-bottom:12px;
 }
-h2{margin:0 0 12px;color:var(--amber);font-size:clamp(1.7rem,3vw,2.5rem)}
-p,.scenario,.explain{font-size:1.15rem;line-height:1.5}
-.scenario{
-  background:rgba(53,224,208,.1); border-left:6px solid var(--teal);
-  padding:16px; border-radius:12px; margin:18px 0;
+h2{
+  margin:0 0 12px;
+  color:var(--amber);
+  font-size:clamp(1.7rem,3vw,2.45rem);
 }
-.question{font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:800;line-height:1.35;margin:20px 0}
-.choices{display:grid;gap:13px}
+.story{
+  background:rgba(55,224,208,.11);
+  border-left:6px solid var(--teal);
+  border-radius:12px;
+  padding:15px;
+  line-height:1.48;
+  font-size:1.1rem;
+}
+.question{
+  margin:20px 0 14px;
+  font-size:clamp(1.22rem,2.2vw,1.55rem);
+  font-weight:900;
+  line-height:1.35;
+}
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+@media(max-width:650px){
+  .choices{grid-template-columns:1fr}
+}
 button{
-  font-family:inherit; border:none; cursor:pointer; border-radius:15px;
-  padding:16px 18px; font-size:1.12rem; font-weight:800; transition:.15s;
+  font-family:inherit;
+  cursor:pointer;
+  border:none;
+  border-radius:15px;
+  padding:16px 18px;
+  font-size:1.08rem;
+  font-weight:900;
+  transition:.15s ease;
 }
 button:hover{transform:translateY(-2px)}
-.choice{background:#edf8f9;color:#08131a;text-align:left;border:3px solid transparent}
+.choice{
+  background:#eef9fa;
+  color:#08131a;
+  border:3px solid transparent;
+  text-align:left;
+}
 .choice:hover{border-color:var(--teal)}
-.primary{background:var(--teal);color:#061014;margin-top:18px}
+.primary{
+  background:var(--teal);
+  color:#061014;
+  margin-top:18px;
+}
+.secondary{
+  background:#263b47;
+  color:var(--text);
+  border:1px solid rgba(255,255,255,.16);
+}
 .feedback{
-  display:none; margin-top:16px; padding:16px; border-radius:14px;
-  font-size:1.1rem; line-height:1.45; font-weight:bold;
+  display:none;
+  margin-top:16px;
+  padding:16px;
+  border-radius:14px;
+  font-size:1.08rem;
+  line-height:1.42;
+  font-weight:bold;
 }
-.correct{display:block;background:rgba(88,217,139,.16);border:2px solid var(--green)}
-.wrong{display:block;background:rgba(255,107,107,.16);border:2px solid var(--red)}
+.correct{
+  display:block;
+  background:rgba(88,217,139,.16);
+  border:2px solid var(--green);
+}
+.wrong{
+  display:block;
+  background:rgba(255,107,107,.16);
+  border:2px solid var(--red);
+}
 .hidden{display:none}
-.table{
-  width:100%; border-collapse:collapse; margin:16px 0; background:#0b1b25;
-  overflow:hidden; border-radius:12px; font-size:1.05rem;
+.final{
+  text-align:center;
+  background:linear-gradient(180deg,var(--panel),#08131a);
+  border:2px solid rgba(55,224,208,.42);
+  border-radius:22px;
+  padding:34px;
 }
-.table th,.table td{border:1px solid rgba(255,255,255,.18);padding:12px;text-align:left}
-.table th{color:var(--teal)}
-.final{text-align:center}
 .big{font-size:5rem}
 .takeaway{
-  text-align:left; max-width:760px; margin:22px auto 0;
-  background:rgba(53,224,208,.12); border-left:6px solid var(--teal);
-  border-radius:14px; padding:18px; font-size:1.15rem; line-height:1.5;
+  text-align:left;
+  max-width:850px;
+  margin:22px auto 0;
+  background:rgba(55,224,208,.12);
+  border-left:7px solid var(--teal);
+  border-radius:14px;
+  padding:18px;
+  line-height:1.5;
+  font-size:1.12rem;
+}
+.mini-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:18px;
+}
+@media(max-width:750px){.mini-grid{grid-template-columns:1fr}}
+.mini{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:14px;
+  padding:15px;
+  line-height:1.45;
 }
 </style>
 </head>
 <body>
 <div class="app">
 <header>
-  <h1>DIFFERENTIATION DIAGNOSTIC</h1>
-  <div class="subtitle">Science Night Shift • EOC Review Challenge</div>
+  <h1>CELL IDENTITY THEFT</h1>
+  <div class="subtitle">Science Night Shift • Differentiation Investigation</div>
 </header>
 
 <div class="progress-wrap">
   <div class="progress-label">
-    <span id="progressText">System Ready</span>
-    <span id="scoreText">Mistakes: 0</span>
+    <span id="progressText">Case files locked</span>
+    <span id="scoreText">Errors: 0</span>
   </div>
   <div class="progress-bar"><div class="progress" id="progress"></div></div>
 </div>
 
 <main>
 <section class="screen active" id="welcome">
-  <div class="card">
-    <span class="badge">EOC REVIEW MODE</span>
-    <h2>Cell Specialization Challenge</h2>
-    <p>This review checks the three big ideas from today’s lesson:</p>
-    <p>✅ Specialized cells have specific jobs.<br>
-       ✅ Cells can have the same DNA but use different genes.<br>
-       ✅ Internal and external factors influence differentiation.</p>
-    <p class="question">Answer each EOC-style question to complete the diagnostic.</p>
-    <button class="primary" onclick="start()">START DIAGNOSTIC</button>
+  <div class="case-layout">
+    <div class="board">
+      <div class="board-title">
+        <strong>INCIDENT BOARD</strong>
+        <span class="stamp">DATABASE FAILURE</span>
+      </div>
+      <div class="evidence">
+        <div class="file">
+          <h3>Incident Summary</h3>
+          <p>A lab database crashed. Specialized cells lost their identity labels.</p>
+        </div>
+        <div class="file">
+          <h3>Your Mission</h3>
+          <p>Use DNA evidence, active genes, outside signals, and cell traits to identify each missing cell.</p>
+        </div>
+        <div class="file">
+          <h3>Reminder</h3>
+          <p>Cells can have the same DNA but different active genes and different functions.</p>
+        </div>
+      </div>
+      <div class="sample-card">
+        <div class="scan-line"></div>
+        <div class="sample-icon">🧬</div>
+        <div class="scan-line"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <span class="badge">CASE MODE</span>
+      <h2>Recover the Missing Cell Identities</h2>
+      <p class="story">
+        Each case file contains multiple pieces of evidence. Do not guess from one clue.
+        Read the whole report, then decide which specialized cell was mislabeled.
+      </p>
+      <div class="mini-grid">
+        <div class="mini"><strong>DNA Evidence</strong><br>Do the cells share the same DNA?</div>
+        <div class="mini"><strong>Gene Evidence</strong><br>Which genes are active?</div>
+        <div class="mini"><strong>Signal Evidence</strong><br>What outside signals influenced the cell?</div>
+      </div>
+      <p class="question">Ready to open the first stolen identity file?</p>
+      <button class="primary" onclick="startGame()">OPEN CASE FILES</button>
+    </div>
   </div>
 </section>
 
-<section class="screen" id="quiz">
-  <div class="card">
-    <span class="badge" id="qNumber"></span>
-    <h2 id="title"></h2>
-    <div id="scenario" class="scenario"></div>
-    <div id="tableWrap"></div>
-    <p class="question" id="question"></p>
-    <div class="choices" id="choices"></div>
-    <div class="feedback" id="feedback"></div>
-    <button class="primary hidden" id="nextBtn" onclick="next()">NEXT QUESTION</button>
+<section class="screen" id="game">
+  <div class="case-layout">
+    <div class="board">
+      <div class="board-title">
+        <strong id="caseTitle">CASE FILE</strong>
+        <span class="stamp" id="caseStamp">UNSOLVED</span>
+      </div>
+      <div class="evidence" id="evidence"></div>
+      <div class="sample-card">
+        <div class="scan-line"></div>
+        <div class="sample-icon" id="sampleIcon">❓</div>
+        <div class="scan-line"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <span class="badge" id="caseNumber"></span>
+      <h2 id="title"></h2>
+      <p class="story" id="story"></p>
+      <p class="question" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="primary hidden" id="nextBtn" onclick="nextCase()">NEXT CASE</button>
+    </div>
   </div>
 </section>
 
 <section class="screen" id="final">
-  <div class="card final">
-    <div class="big">✅</div>
-    <h2>DIAGNOSTIC COMPLETE</h2>
+  <div class="final">
+    <div class="big">🕵️‍♀️</div>
+    <h2>IDENTITY RECOVERY COMPLETE</h2>
     <p class="question" id="rank"></p>
     <p id="finalScore"></p>
     <div class="takeaway">
-      <strong>Final Takeaway:</strong><br>
-      Cells can have the same DNA but become different cell types because different genes are active. Internal factors, like genes, and external factors, like signals from the environment, influence differentiation and specialization.
+      <strong>Case Closed:</strong><br>
+      Specialized cells can have the same DNA but different structures and functions. 
+      Different active genes and outside signals influence differentiation, allowing cells to become specialized for specific jobs.
     </div>
-    <button class="primary" onclick="restart()">RESTART</button>
+    <button class="primary" onclick="restartGame()">REOPEN CASE FILES</button>
   </div>
 </section>
 </main>
 </div>
 
 <script>
-const questions = [
-{
-title:"Question 1: Structure and Function",
-scenario:"A student observes that a nerve cell has long branching extensions.",
-question:"How does this structure help the nerve cell perform its job?",
-choices:[
-"It helps the cell send messages over long distances.",
-"It helps the cell carry oxygen.",
-"It helps the cell form a protective barrier.",
-"It helps the cell store extra water."
-],
-answer:"It helps the cell send messages over long distances.",
-explain:"Correct! A nerve cell’s long shape helps it send signals through the body."
-},
-{
-title:"Question 2: Specialized Cell Data",
-scenario:"A scientist studies several specialized cells from the same organism.",
-table:`
-<table class="table">
-<tr><th>Cell Type</th><th>Main Function</th></tr>
-<tr><td>Cell A</td><td>Carries oxygen</td></tr>
-<tr><td>Cell B</td><td>Sends signals</td></tr>
-<tr><td>Cell C</td><td>Contracts for movement</td></tr>
-<tr><td>Cell D</td><td>Forms a protective covering</td></tr>
-</table>
-`,
-question:"Which statement best explains why these cells have different functions?",
-choices:[
-"Each cell contains different DNA.",
-"Each cell contains a different number of chromosomes.",
-"Different genes are active in different cells.",
-"Specialized cells do not use DNA."
-],
-answer:"Different genes are active in different cells.",
-explain:"Correct! Most cells have the same DNA, but different genes can be active."
-},
-{
-title:"Question 3: Internal Factors",
-scenario:"A developing cell becomes a muscle cell because muscle-related genes are active inside the cell.",
-question:"Which factor most directly influenced this specialization?",
-choices:[
-"Active genes inside the cell",
-"Signals from nearby cells",
-"Temperature outside the cell",
-"Nutrients in the environment"
-],
-answer:"Active genes inside the cell",
-explain:"Correct! Active genes are internal factors because they come from inside the cell."
-},
-{
-title:"Question 4: External Factors",
-scenario:"Scientists grow identical stem cells in two containers. Cells in Container A receive nerve-growth signals and become nerve cells. Cells in Container B receive muscle-growth signals and become muscle cells.",
-question:"What does this investigation demonstrate?",
-choices:[
-"Stem cells contain different DNA.",
-"External factors can influence differentiation.",
-"Cells lose chromosomes as they specialize.",
-"DNA replication stops during differentiation."
-],
-answer:"External factors can influence differentiation.",
-explain:"Correct! Signals from the environment are external factors that can influence what cells become."
-},
-{
-title:"Question 5: Same DNA, Different Cells",
-scenario:"A muscle cell and a skin cell are taken from the same person. Both cells contain the same DNA.",
-question:"Why do these cells look and function differently?",
-choices:[
-"They use different genes.",
-"They contain different chromosomes.",
-"They were made by different organisms.",
-"They no longer contain DNA."
-],
-answer:"They use different genes.",
-explain:"Correct! Different genes are active in different specialized cells."
-},
-{
-title:"Question 6: Cell Specialization",
-scenario:"Red blood cells are thin, disc-shaped cells that move through blood vessels.",
-question:"Which function matches this specialized structure?",
-choices:[
-"Carrying oxygen through the body",
-"Sending electrical messages",
-"Contracting to move bones",
-"Protecting the outside of the body"
-],
-answer:"Carrying oxygen through the body",
-explain:"Correct! Red blood cells are specialized to carry oxygen."
-},
-{
-title:"Question 7: Internal or External?",
-scenario:"A developing cell receives hormone signals from another part of the body.",
-question:"How should this factor be classified?",
-choices:[
-"Internal factor",
-"External factor",
-"Chromosome change",
-"DNA replication error"
-],
-answer:"External factor",
-explain:"Correct! Hormone signals come from outside the cell, so they are external factors."
-},
-{
-title:"Question 8: Big Picture",
-scenario:"During development, unspecialized cells become nerve cells, muscle cells, skin cells, and blood cells.",
-question:"Which statement best summarizes cell differentiation?",
-choices:[
-"Cells become specialized for different jobs.",
-"Cells all become the same type of cell.",
-"Cells lose all DNA as they develop.",
-"Cells stop using genes after they divide."
-],
-answer:"Cells become specialized for different jobs.",
-explain:"Correct! Differentiation is the process of cells becoming specialized."
-}
+const cases = [
+  {
+    title:"The Long-Distance Messenger",
+    icon:"🧠",
+    story:"A cell label was deleted from the database. The evidence suggests this cell is built for communication.",
+    evidence:[
+      ["DNA Report","DNA matches the organism’s other body cells."],
+      ["Active Gene Report","Genes related to cell communication are active."],
+      ["Signal Report","Signals came from nearby nervous tissue."],
+      ["Trait Observation","The cell has long branching extensions."]
+    ],
+    question:"Which cell identity was stolen?",
+    choices:["Neuron","Muscle Cell","Red Blood Cell","Skin Cell"],
+    answer:"Neuron",
+    feedback:"Correct. Long branches, communication genes, and nervous tissue signals all point to a neuron."
+  },
+  {
+    title:"The Oxygen Courier",
+    icon:"🩸",
+    story:"This cell appears to be designed for transport, but its file name is missing.",
+    evidence:[
+      ["DNA Report","DNA matches the organism’s other body cells."],
+      ["Active Gene Report","Genes related to oxygen transport are active."],
+      ["Signal Report","External signals promoted blood cell development."],
+      ["Trait Observation","The cell is small, thin, and disc-shaped."]
+    ],
+    question:"Which specialized cell best matches the evidence?",
+    choices:["Skin Cell","Neuron","Red Blood Cell","Muscle Cell"],
+    answer:"Red Blood Cell",
+    feedback:"Correct. Oxygen transport genes and a thin disc shape match a red blood cell."
+  },
+  {
+    title:"The Force Producer",
+    icon:"💪",
+    story:"A replacement tissue sample is missing its label. The evidence points to movement.",
+    evidence:[
+      ["DNA Report","DNA matches the organism’s other body cells."],
+      ["Active Gene Report","Muscle-related genes are active."],
+      ["Signal Report","External signals promoted movement tissue development."],
+      ["Trait Observation","The cell is long and fiber-like."]
+    ],
+    question:"What is the correct identity?",
+    choices:["Muscle Cell","Red Blood Cell","Neuron","Skin Cell"],
+    answer:"Muscle Cell",
+    feedback:"Correct. Muscle genes, movement signals, and a fiber-like structure point to a muscle cell."
+  },
+  {
+    title:"The Barrier Builder",
+    icon:"🛡️",
+    story:"This cell was found near the outside surface of the body, but its identity was erased.",
+    evidence:[
+      ["DNA Report","DNA matches the organism’s other body cells."],
+      ["Active Gene Report","Skin-cell genes are active."],
+      ["Signal Report","Signals came from nearby protective tissue."],
+      ["Trait Observation","The cells are arranged in flat layers."]
+    ],
+    question:"Which identity should be restored?",
+    choices:["Neuron","Skin Cell","Muscle Cell","Red Blood Cell"],
+    answer:"Skin Cell",
+    feedback:"Correct. Flat layers and protective tissue signals match skin cells."
+  },
+  {
+    title:"The Same DNA Problem",
+    icon:"🧬",
+    story:"Investigators found two cells from the same person. One became a nerve cell. One became a muscle cell.",
+    evidence:[
+      ["DNA Report","Both cells have the same DNA sequence."],
+      ["Gene Report","Different genes are active in each cell."],
+      ["Signal Report","Each cell received different outside signals."],
+      ["Observation","The cells have different structures and jobs."]
+    ],
+    question:"What best explains why these cells became different?",
+    choices:[
+      "They contain different DNA.",
+      "Different genes are active and different signals influenced them.",
+      "They have different chromosome numbers.",
+      "They stopped using DNA."
+    ],
+    answer:"Different genes are active and different signals influenced them.",
+    feedback:"Correct. Same DNA can lead to different cells when different genes are active and signals guide differentiation."
+  },
+  {
+    title:"Internal Factor Evidence",
+    icon:"⚙️",
+    story:"A report asks you to identify which clue came from inside the cell.",
+    evidence:[
+      ["Clue A","Hormone signal from another part of the body."],
+      ["Clue B","Signal from a nearby cell."],
+      ["Clue C","Active genes inside the developing cell."],
+      ["Clue D","Chemical signal in the environment."]
+    ],
+    question:"Which clue is an internal factor?",
+    choices:["Clue A","Clue B","Clue C","Clue D"],
+    answer:"Clue C",
+    feedback:"Correct. Active genes are internal factors because they are inside the cell."
+  },
+  {
+    title:"External Factor Evidence",
+    icon:"🌎",
+    story:"A developing cell changed after receiving signals from surrounding tissue.",
+    evidence:[
+      ["DNA Report","The DNA did not change."],
+      ["Gene Report","Some genes became active."],
+      ["Environment Report","Nearby cells sent chemical signals."],
+      ["Result","The developing cell specialized into a new cell type."]
+    ],
+    question:"Which evidence describes an external factor?",
+    choices:[
+      "The DNA did not change.",
+      "Nearby cells sent chemical signals.",
+      "Some genes became active.",
+      "The cell contained chromosomes."
+    ],
+    answer:"Nearby cells sent chemical signals.",
+    feedback:"Correct. Signals from nearby cells come from outside the cell, so they are external factors."
+  },
+  {
+    title:"Final Case: The Identity Thief",
+    icon:"🔎",
+    story:"The database thief left one final misconception in the system. Your job is to remove it.",
+    evidence:[
+      ["False Claim","Specialized cells have different DNA."],
+      ["Correct Evidence","Specialized cells can share the same DNA."],
+      ["Gene Evidence","Different genes may be active."],
+      ["Signal Evidence","External signals can influence differentiation."]
+    ],
+    question:"Which statement should replace the false claim?",
+    choices:[
+      "Specialized cells can have the same DNA but different active genes.",
+      "Specialized cells lose DNA as they develop.",
+      "Specialized cells contain different chromosome numbers.",
+      "Specialized cells no longer use genes."
+    ],
+    answer:"Specialized cells can have the same DNA but different active genes.",
+    feedback:"Correct. This is the key idea behind cell differentiation and specialization."
+  }
 ];
 
-let current=0;
-let mistakes=0;
-let locked=false;
+let current = 0;
+let errors = 0;
+let locked = false;
 
 function show(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
-function start(){
-current=0;
-mistakes=0;
-show("quiz");
-loadQuestion();
+function startGame(){
+  current = 0;
+  errors = 0;
+  show("game");
+  loadCase();
 }
 
 function updateProgress(){
-document.getElementById("progress").style.width=(current/questions.length*100)+"%";
-document.getElementById("progressText").textContent=`Question ${Math.min(current+1,questions.length)} of ${questions.length}`;
-document.getElementById("scoreText").textContent=`Mistakes: ${mistakes}`;
+  const percent = (current / cases.length) * 100;
+  document.getElementById("progress").style.width = percent + "%";
+  document.getElementById("progressText").textContent = `Case ${Math.min(current+1,cases.length)} of ${cases.length}`;
+  document.getElementById("scoreText").textContent = `Errors: ${errors}`;
 }
 
-function loadQuestion(){
-locked=false;
-const q=questions[current];
-updateProgress();
+function loadCase(){
+  locked = false;
+  const c = cases[current];
+  updateProgress();
 
-document.getElementById("qNumber").textContent=`DIAGNOSTIC ITEM ${current+1}`;
-document.getElementById("title").textContent=q.title;
-document.getElementById("scenario").textContent=q.scenario;
-document.getElementById("tableWrap").innerHTML=q.table || "";
-document.getElementById("question").textContent=q.question;
+  document.getElementById("caseTitle").textContent = `CASE FILE ${current + 1}`;
+  document.getElementById("caseStamp").textContent = "UNSOLVED";
+  document.getElementById("caseNumber").textContent = `EVIDENCE FILE ${current + 1}`;
+  document.getElementById("title").textContent = c.title;
+  document.getElementById("story").textContent = c.story;
+  document.getElementById("question").textContent = c.question;
+  document.getElementById("sampleIcon").textContent = c.icon;
 
-const choices=document.getElementById("choices");
-choices.innerHTML="";
-q.choices.forEach(choice=>{
-const btn=document.createElement("button");
-btn.className="choice";
-btn.textContent=choice;
-btn.onclick=()=>check(choice);
-choices.appendChild(btn);
-});
+  const evidenceBox = document.getElementById("evidence");
+  evidenceBox.innerHTML = "";
+  c.evidence.forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "file";
+    div.innerHTML = `<h3>${item[0]}</h3><p>${item[1]}</p>`;
+    evidenceBox.appendChild(div);
+  });
 
-const feedback=document.getElementById("feedback");
-feedback.className="feedback";
-feedback.textContent="";
-document.getElementById("nextBtn").classList.add("hidden");
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
+  c.choices.forEach(choice=>{
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = choice;
+    btn.onclick = () => checkAnswer(choice);
+    choices.appendChild(btn);
+  });
+
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback";
+  feedback.textContent = "";
+  document.getElementById("nextBtn").classList.add("hidden");
 }
 
-function check(choice){
-if(locked)return;
-const q=questions[current];
-const feedback=document.getElementById("feedback");
+function checkAnswer(choice){
+  if(locked) return;
+  const c = cases[current];
+  const feedback = document.getElementById("feedback");
 
-if(choice===q.answer){
-locked=true;
-feedback.className="feedback correct";
-feedback.textContent=q.explain;
-document.getElementById("nextBtn").classList.remove("hidden");
-}else{
-mistakes++;
-updateProgress();
-feedback.className="feedback wrong";
-feedback.textContent="Try again. Read the scenario carefully and look for the clue.";
-}
-}
-
-function next(){
-current++;
-if(current>=questions.length){finish();}
-else{loadQuestion();}
+  if(choice === c.answer){
+    locked = true;
+    feedback.className = "feedback correct";
+    feedback.textContent = c.feedback;
+    document.getElementById("caseStamp").textContent = "SOLVED";
+    document.getElementById("nextBtn").classList.remove("hidden");
+  } else {
+    errors++;
+    updateProgress();
+    feedback.className = "feedback wrong";
+    feedback.textContent = "Evidence mismatch. Review the DNA report, active gene report, signal report, and trait observation.";
+  }
 }
 
-function finish(){
-document.getElementById("progress").style.width="100%";
-document.getElementById("progressText").textContent="Diagnostic Complete";
-document.getElementById("scoreText").textContent=`Mistakes: ${mistakes}`;
-
-let rank = mistakes<=2 ? "EOC Ready: Strong Understanding" :
-           mistakes<=5 ? "Almost There: Keep Practicing" :
-           "Review Needed: Try Again";
-
-document.getElementById("rank").textContent=rank;
-document.getElementById("finalScore").textContent=`Final Mistakes: ${mistakes}`;
-show("final");
+function nextCase(){
+  current++;
+  if(current >= cases.length){
+    finishGame();
+  } else {
+    loadCase();
+  }
 }
 
-function restart(){start();}
+function finishGame(){
+  document.getElementById("progress").style.width = "100%";
+  document.getElementById("progressText").textContent = "Investigation Complete";
+  document.getElementById("scoreText").textContent = `Errors: ${errors}`;
+
+  let rank;
+  if(errors <= 2){
+    rank = "Lead Cell Identity Investigator";
+  } else if(errors <= 5){
+    rank = "Certified Differentiation Investigator";
+  } else {
+    rank = "Investigator in Training";
+  }
+
+  document.getElementById("rank").textContent = rank;
+  document.getElementById("finalScore").textContent = `Total Evidence Errors: ${errors}`;
+  show("final");
+}
+
+function restartGame(){
+  startGame();
+}
 </script>
 </body>
 </html>
