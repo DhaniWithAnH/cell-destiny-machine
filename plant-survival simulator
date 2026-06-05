@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Plant Survival Simulator</title>
+<style>
+:root{
+  --bg:#10251c; --panel:#17382b; --panel2:#224c39;
+  --green:#47d16c; --yellow:#ffd166; --blue:#5bbcff;
+  --red:#ff6b6b; --text:#f6fff8; --muted:#c7d8cf;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#0d1f18,#17382b 55%,#0b1511);
+  color:var(--text); display:flex; justify-content:center; align-items:center; padding:18px;
+}
+.app{
+  width:min(1050px,100%); background:rgba(13,31,24,.96);
+  border:2px solid rgba(71,209,108,.45); border-radius:24px;
+  overflow:hidden; box-shadow:0 0 35px rgba(71,209,108,.25);
+}
+header{
+  padding:22px 28px; background:linear-gradient(90deg,#123022,#22503a);
+  border-bottom:2px solid rgba(71,209,108,.35);
+}
+h1{margin:0;color:var(--green);font-size:clamp(2rem,4vw,3.6rem)}
+.subtitle{color:var(--muted);margin-top:6px;font-size:1.15rem}
+main{padding:28px}
+.grid{display:grid;grid-template-columns:1fr 1.2fr;gap:24px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.plant-card,.control-card{
+  background:var(--panel); border:2px solid rgba(255,255,255,.09);
+  border-radius:22px; padding:24px;
+}
+.plant-box{
+  min-height:380px; border-radius:20px; background:linear-gradient(#7bdcff 0%,#dff8ff 45%,#66c96f 45%);
+  position:relative; overflow:hidden; border:4px solid #0b1511;
+}
+.sun{position:absolute;top:22px;left:28px;font-size:4rem}
+.cloud{position:absolute;top:62px;right:36px;font-size:3rem}
+.plant{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  font-size:7rem; transition:.3s;
+}
+.status{
+  position:absolute;bottom:16px;left:16px;right:16px;
+  background:rgba(13,31,24,.85);border-radius:14px;padding:12px;
+  font-weight:bold;text-align:center;
+}
+h2{margin:0 0 14px;color:var(--yellow);font-size:clamp(1.6rem,3vw,2.3rem)}
+.slider-group{
+  background:rgba(255,255,255,.06); border-radius:16px; padding:16px; margin:14px 0;
+}
+label{display:flex;justify-content:space-between;font-weight:bold;font-size:1.1rem}
+input[type="range"]{width:100%;margin-top:12px}
+.result{
+  margin-top:18px; padding:18px; border-radius:16px; line-height:1.45;
+  background:rgba(255,255,255,.07); border-left:7px solid var(--green); font-size:1.15rem;
+}
+button{
+  border:none; border-radius:14px; padding:15px 18px; font-size:1.05rem;
+  font-weight:800; cursor:pointer; background:var(--green); color:#071018; margin-top:14px;
+}
+.challenge{
+  margin-top:22px; background:#10251c; border:2px solid rgba(255,255,255,.12);
+  border-radius:18px; padding:18px;
+}
+.choice{
+  display:block; width:100%; text-align:left; margin:10px 0; background:#eef9f0; color:#10251c;
+}
+.feedback{font-weight:bold;margin-top:12px;padding:12px;border-radius:12px;display:none}
+.correct{display:block;background:rgba(71,209,108,.18);border:2px solid var(--green)}
+.wrong{display:block;background:rgba(255,107,107,.18);border:2px solid var(--red)}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>PLANT SURVIVAL SIMULATOR</h1>
+  <div class="subtitle">Adjust the inputs and predict glucose production.</div>
+</header>
+
+<main>
+<div class="grid">
+  <section class="plant-card">
+    <div class="plant-box">
+      <div class="sun" id="sunIcon">☀️</div>
+      <div class="cloud" id="cloudIcon">☁️</div>
+      <div class="plant" id="plantIcon">🌱</div>
+      <div class="status" id="statusText">System ready</div>
+    </div>
+  </section>
+
+  <section class="control-card">
+    <h2>Photosynthesis Inputs</h2>
+
+    <div class="slider-group">
+      <label>Sunlight <span id="sunVal">50%</span></label>
+      <input type="range" id="sunlight" min="0" max="100" value="50" oninput="updateSim()">
+    </div>
+
+    <div class="slider-group">
+      <label>Water <span id="waterVal">50%</span></label>
+      <input type="range" id="water" min="0" max="100" value="50" oninput="updateSim()">
+    </div>
+
+    <div class="slider-group">
+      <label>Carbon Dioxide <span id="co2Val">50%</span></label>
+      <input type="range" id="co2" min="0" max="100" value="50" oninput="updateSim()">
+    </div>
+
+    <div class="result" id="resultBox">
+      Move the sliders to test how sunlight, water, and carbon dioxide affect glucose production.
+    </div>
+
+    <button onclick="randomScenario()">Generate Scenario</button>
+    <button onclick="resetSim()">Reset</button>
+
+    <div class="challenge">
+      <h2>Quick Check</h2>
+      <p><strong>If sunlight, water, or carbon dioxide are missing, what happens to glucose production?</strong></p>
+      <button class="choice" onclick="checkAnswer(this, true)">Glucose production decreases or stops.</button>
+      <button class="choice" onclick="checkAnswer(this, false)">Glucose production increases.</button>
+      <button class="choice" onclick="checkAnswer(this, false)">The plant makes glucose without inputs.</button>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </section>
+</div>
+</main>
+</div>
+
+<script>
+function getLevel(value){
+  if(value < 25) return "low";
+  if(value < 70) return "medium";
+  return "high";
+}
+
+function updateSim(){
+  const sun = Number(document.getElementById("sunlight").value);
+  const water = Number(document.getElementById("water").value);
+  const co2 = Number(document.getElementById("co2").value);
+
+  document.getElementById("sunVal").textContent = sun + "%";
+  document.getElementById("waterVal").textContent = water + "%";
+  document.getElementById("co2Val").textContent = co2 + "%";
+
+  const lowest = Math.min(sun, water, co2);
+  let message = "";
+  let plant = "🌱";
+  let status = "";
+
+  if(lowest < 15){
+    message = "Photosynthesis is almost stopped. One or more required inputs are missing.";
+    plant = "🥀";
+    status = "Glucose Production: CRITICAL";
+  } else if(lowest < 35){
+    message = "Photosynthesis is limited. The plant can make some glucose, but not enough for strong growth.";
+    plant = "🌿";
+    status = "Glucose Production: LOW";
+  } else if(lowest < 70){
+    message = "Photosynthesis is working. The plant has enough inputs to produce glucose.";
+    plant = "🌱";
+    status = "Glucose Production: MODERATE";
+  } else {
+    message = "Photosynthesis is high. The plant has strong levels of sunlight, water, and carbon dioxide.";
+    plant = "🌳";
+    status = "Glucose Production: HIGH";
+  }
+
+  document.getElementById("plantIcon").textContent = plant;
+  document.getElementById("statusText").textContent = status;
+  document.getElementById("resultBox").innerHTML =
+    `<strong>Result:</strong> ${message}<br><br>
+     <strong>Reminder:</strong> Photosynthesis uses sunlight, water, and carbon dioxide to make glucose and oxygen.`;
+}
+
+function randomScenario(){
+  document.getElementById("sunlight").value = Math.floor(Math.random()*101);
+  document.getElementById("water").value = Math.floor(Math.random()*101);
+  document.getElementById("co2").value = Math.floor(Math.random()*101);
+  updateSim();
+}
+
+function resetSim(){
+  document.getElementById("sunlight").value = 50;
+  document.getElementById("water").value = 50;
+  document.getElementById("co2").value = 50;
+  document.getElementById("feedback").style.display = "none";
+  updateSim();
+}
+
+function checkAnswer(button, correct){
+  const fb = document.getElementById("feedback");
+  if(correct){
+    fb.className = "feedback correct";
+    fb.textContent = "Correct! Photosynthesis requires sunlight, water, and carbon dioxide. If one is missing, glucose production decreases or stops.";
+  } else {
+    fb.className = "feedback wrong";
+    fb.textContent = "Try again. A plant needs all photosynthesis inputs to make glucose efficiently.";
+  }
+}
+
+updateSim();
+</script>
+</body>
+</html>
